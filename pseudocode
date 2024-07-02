@@ -1,0 +1,69 @@
+#include <stdint.h>
+
+// Define GPIO pins
+#define LED_PIN 5
+#define SWITCH_PIN 2
+
+// Function prototype for Interrupt Service Routine (ISR)
+void switch_ISR(void);
+
+// Main function
+int main(void)
+{
+    // Initialize GPIO
+    init_GPIO();
+    
+    // Configure interrupt for switch
+    configure_switch_interrupt();
+    
+    // Enable global interrupts
+    enable_global_interrupts();
+    
+    // Main loop
+    while(1)
+    {
+        // Main program execution
+    }
+    
+    return 0;
+}
+
+// Interrupt Service Routine for switch
+void switch_ISR(void)
+{
+    // Toggle LED state
+    toggle_LED();
+    
+    // Clear interrupt flag
+    clear_interrupt_flag();
+}
+
+// Function to initialize GPIO
+void init_GPIO(void)
+{
+    // Set LED pin as output
+    set_pin_mode(LED_PIN, OUTPUT);
+    
+    // Set switch pin as input with pull-up
+    set_pin_mode(SWITCH_PIN, INPUT_PULLUP);
+}
+
+// Function to configure switch interrupt
+void configure_switch_interrupt(void)
+{
+    // Configure interrupt for falling edge (button press)
+    set_interrupt_trigger(SWITCH_PIN, FALLING_EDGE);
+    
+    // Attach ISR to switch pin
+    attach_interrupt(SWITCH_PIN, switch_ISR);
+}
+
+// Function to toggle LED state
+void toggle_LED(void)
+{
+    // Read current LED state
+    uint8_t led_state = read_pin(LED_PIN);
+    
+    // Toggle LED state
+    write_pin(LED_PIN, !led_state);
+}
